@@ -2,26 +2,68 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+.button {
+  width: 200px;
+  padding: 8px;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
+.button-1 {
+  background-color: transparent;
+  border: 1px solid #00a372;
+  border-bottom: 2px solid #00a372;
+  border-radius: 5px;
+  -webkit-transition: all 0.15s ease-in-out;
+  transition: all 0.15s ease-in-out;
+  color: #00a372;
+  background-image: -webkit-linear-gradient(30deg, #00a372 50%, transparent 50%);
+  background-image: linear-gradient(30deg, #00a372 50%, transparent 50%);
+  background-size: 600px;
+  background-repeat: no-repeat;
+  background-position: 100%;
+  -webkit-transition: background 300ms ease-in-out;
+  transition: background 300ms ease-in-out;
+  box-shadow:
+    0 0 10px 0 #00a372 inset,
+    0 0 20px 2px #00a372;
+  border: 3px solid #00a372;
+  animation: pulse 1s infinite;
+  background-position: 0%;
+  color: #FBFBFB;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  70% {
+    transform: scale(0.9);
+  }
+  100% {
+    transform: scale(1);
   }
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+.light {
+  overflow: hidden;
+}
+
+.light:before {
+  content: "";
+  width: 200%;
+  height: 200%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: rotate(45deg);
+  position: absolute;
+  top: -10%;
+  left: -200%;
+  transition: 0.2s ease-in-out;
+}
+
+.light:hover:before {
+  left: -10%;
 }
