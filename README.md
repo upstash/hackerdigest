@@ -1,36 +1,50 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# HackerDigest
 
-## Getting Started
+HackerDigest is a modern app designed to summarize top scoring, up to date Hackernews stories for TLDR lovers. This app showcases [https://upstash.com/](Upstash) products. HackerDigest is perfect for tech lovers who don't like spending ton of time reading every bit of word.
 
-First, run the development server:
+## Features
+
+- **Top Stories Summary**: Get the latest high-scoring Hacker News stories in a condensed form.
+- **Frequent Updates**: Stories are updated in every 6 hour, ensuring you never miss out on trending topics.
+- **Custom Summaries**: Tailor the summary length to fit your reading preferences.
+
+## Built With
+
+- [NextJS 14](https://nextjs.org/)
+- [Vercel](https://vercel.com)
+- [Tailwind](https://tailwindcss.com/)
+- [Upstash Redis](https://github.com/upstash/upstash-redis)
+- [Upstash Qstash](https://github.com/upstash/sdk-qstash-ts)
+- [Upstash Ratelimit](https://github.com/upstash/ratelimit)
+
+## Installation
+
+To install HackerDigest, follow these steps:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+pnpm install
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Environment Keys
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+OPENAI_API_KEY=XXX
+OPENAI_ORGANIZATION_API=XXX
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+UPSTASH_REDIS_REST_URL=XXX
+UPSTASH_REDIS_REST_TOKEN=XXX
 
-## Learn More
+QSTASH_CURRENT_SIGNING_KEY=XXX
+QSTASH_NEXT_SIGNING_KEY=XXX
+```
 
-To learn more about Next.js, take a look at the following resources:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Contributing to HackerDigest
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+We welcome contributions to HackerDigest. If you have a suggestion that would make this better, please fork the repository and create a pull request. Don't forget to give the project a star! Thanks again!
 
-## Deploy on Vercel
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Feature Pipeline
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+[ ] - Create a newsletter with Resend and send it every 24 hour to users.

@@ -7,7 +7,6 @@ export const maxDuration = 150
 
 async function handler(req: NextRequest) {
   console.log("Starting to summarize data from HackerNews")
-  const startDate = Date.now()
 
   const receiver = new Receiver({
     currentSigningKey: process.env.QSTASH_CURRENT_SIGNING_KEY!,
@@ -32,7 +31,7 @@ async function handler(req: NextRequest) {
   const articles = await getSummarizedArticles(10)
 
   if (articles) {
-    console.log(articles, { elapsedTimeInMS: startDate - Date.now() })
+    console.log(articles)
     await setArticles(articles)
     return NextResponse.json({})
   } else {
