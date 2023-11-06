@@ -1,6 +1,4 @@
 import { NextRequest, NextResponse } from "next/server"
-import { setArticles } from "@/commands/set"
-import { getSummarizedArticles } from "@/services/summarizer"
 import { Receiver } from "@upstash/qstash/."
 
 export const maxDuration = 299
@@ -27,18 +25,23 @@ async function handler(req: NextRequest) {
     signature,
     body,
   })
-
-  if (!isValid) {
-    return new NextResponse(new TextEncoder().encode("invalid signature"), { status: 403 })
-  }
-  const articles = await getSummarizedArticles(10)
-  if (articles) {
-    await setArticles(articles)
-    return NextResponse.json({})
-  } else {
-    console.error("Something went wrong articles are missing!")
-    return NextResponse.json({})
-  }
+  console.log({
+    signature,
+    body,
+    isValid,
+  })
+  return NextResponse.json({})
+  //   if (!isValid) {
+  //     return new NextResponse(new TextEncoder().encode("invalid signature"), { status: 403 })
+  //   }
+  //   const articles = await getSummarizedArticles(10)
+  //   if (articles) {
+  //     await setArticles(articles)
+  //     return NextResponse.json({})
+  //   } else {
+  //     console.error("Something went wrong articles are missing!")
+  //     return NextResponse.json({})
+  //   }
 }
 
 export const POST = handler
