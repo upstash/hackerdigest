@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
+import { getSummarizedArticles } from "@/services/summarizer"
 import { Receiver } from "@upstash/qstash/."
 
 export const maxDuration = 299
@@ -25,16 +26,14 @@ async function handler(req: NextRequest) {
     signature,
     body,
   })
-  console.log({
-    signature,
-    body,
-    isValid,
-  })
-  return NextResponse.json({})
-  //   if (!isValid) {
-  //     return new NextResponse(new TextEncoder().encode("invalid signature"), { status: 403 })
-  //   }
-  //   const articles = await getSummarizedArticles(10)
+
+  if (!isValid) {
+    return new NextResponse(new TextEncoder().encode("invalid signature"), { status: 403 })
+  }
+  const articles = await getSummarizedArticles(10)
+  console.log(articles)
+  return NextResponse.json(articles)
+
   //   if (articles) {
   //     await setArticles(articles)
   //     return NextResponse.json({})
