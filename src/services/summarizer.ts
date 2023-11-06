@@ -1,10 +1,9 @@
-import { OpenAI } from "openai"
-
 import {
   getContentsOfArticles,
   HackerNewsStoryWithParsedContent,
   HackerNewsStoryWithRawContent,
-} from "@/app/services/link-parser"
+} from "@/services/link-parser"
+import { OpenAI } from "openai"
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,

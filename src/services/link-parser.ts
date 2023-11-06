@@ -1,24 +1,33 @@
-import parse from "node-html-parser"
+import parse, { HTMLElement } from "node-html-parser"
 
 import { fetchTopStoriesFromLast12Hours, HackerNewsStory } from "./hackernews"
 
 type Content = (string | string[]) | null
 export type HackerNewsStoryWithRawContent = HackerNewsStory & { rawContent: Content }
-export type HackerNewsStoryWithParsedContent = HackerNewsStory & { parsedContent: Content }
+export type HackerNewsStoryWithParsedContent = HackerNewsStory & {
+  parsedContent: Content
+}
 
-async function fetchInnerContent(url?: string): Promise<Content> {
+async function fetchInnerContent(url?: string): Promise<string | string[] | null> {
+  if (!url) throw new Error("URL is missing!")
+  if (!isValidUrl(url)) throw new Error("URL is not valid")
+
   try {
-    if (!url) throw new Error("URL is missing!")
-    if (!isValidUrl(url)) throw new Error("URL is not valid")
-
     const response = await fetch(url)
     const html = await response.text()
     const root = parse(html)
-    const paragraphs = root.querySelectorAll("p")
 
-    return chunkString(paragraphs.map((p) => p.innerText).join(" "))
+    let content = extractText(root.querySelectorAll("p"))
+
+    if (!content) {
+      // If no content was found in <p> tags, fallback to <div> tags
+      content = extractText(root.querySelectorAll("div"))
+    }
+
+    // Assuming chunkString splits the string into manageable pieces
+    return chunkString(content) // Ensure chunkString handles an empty string properly
   } catch (error) {
-    console.error("Error:", error)
+    console.error("Error fetching content:", error)
     return null
   }
 }
@@ -53,4 +62,14 @@ function chunkString(inputString: string, chunkSize = 4000) {
     }
     return chunks
   }
+}
+
+// A function to clean and prepare text content
+function cleanText(text: string) {
+  return text.replace(/\s+/g, " ").trim()
+}
+
+// A function to extract text from a collection of nodes
+function extractText(nodes: HTMLElement[]) {
+  return nodes.map((node) => cleanText(node.innerText)).join(" ")
 }
