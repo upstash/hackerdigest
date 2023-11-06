@@ -7,7 +7,7 @@ import { getSummarizedArticles } from "@/app/services/summarizer"
 async function handler() {
   console.log("Starting to summarize data from HackerNews")
 
-  const articles = await getSummarizedArticles(8)
+  const articles = await getSummarizedArticles(10)
   await setArticles(articles)
 
   return NextResponse.json({ articles })
