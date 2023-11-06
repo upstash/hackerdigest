@@ -1,18 +1,17 @@
 import { OpenAI } from "openai"
 
-import { getContentsOfArticles, SummarizedArticle } from "@/app/services/utils"
+import {
+  getContentsOfArticles,
+  HackerNewsStoryWithParsedContent,
+  HackerNewsStoryWithRawContent,
+} from "@/app/services/link-parser"
 
-export type Content = { content: string | null; title: string; originalLink?: string }
-export type ContentWithoutLink = Omit<Content, "originalLink">
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
   organization: process.env.OPENAI_ORGANIZATION_API,
 })
 
-async function summarizeText(
-  title: string,
-  content: string
-): Promise<ContentWithoutLink | undefined> {
+async function summarizeText(title: string, content: string): Promise<string | undefined> {
   const prompt = `
   Title: "${title}"
   Can you summarize the key points and main ideas of the following text in a concise and clear manner without omitting any important information? '${content}'`
@@ -29,7 +28,7 @@ async function summarizeText(
       stream: false,
       n: 1,
     })
-    return { content: chatCompletion.choices[0]?.text || null, title }
+    return chatCompletion.choices[0]?.text
   } catch (error) {
     console.error("summarizeText failed", (error as Error).message)
   }
@@ -55,13 +54,15 @@ async function summarizeChunk(chunk?: string) {
   return chatCompletion.choices[0]?.text
 }
 
-async function summarizeArticles(article: SummarizedArticle): Promise<Content | undefined> {
-  if (!Array.isArray(article.content)) {
+async function summarizeArticles(
+  article: HackerNewsStoryWithRawContent
+): Promise<string | undefined> {
+  if (!Array.isArray(article.rawContent)) {
     try {
-      if (!article.content) throw new Error("Content is missing from summarizeArticles!")
-      const summarizedText = await summarizeText(article.title, article.content)
+      if (!article.rawContent) throw new Error("Content is missing from summarizeArticles!")
+      const summarizedText = await summarizeText(article.title, article.rawContent)
       if (!summarizedText) throw new Error("summarizedText is missing!")
-      return { ...summarizedText, originalLink: article.href }
+      return summarizedText
     } catch (error) {
       console.error(
         `Something went wrong when summarizing single article ${(error as Error).message}`
@@ -69,7 +70,7 @@ async function summarizeArticles(article: SummarizedArticle): Promise<Content | 
     }
   } else {
     const summarizedChunks = await Promise.all(
-      article.content.map((chunk) => summarizeChunk(chunk))
+      article.rawContent.map((chunk) => summarizeChunk(chunk))
     )
 
     try {
@@ -78,7 +79,7 @@ async function summarizeArticles(article: SummarizedArticle): Promise<Content | 
         summarizedChunks.filter(Boolean).join(" ")
       )
       if (!summarizedText) throw new Error("chunkedSummarizedText is missing!")
-      return { ...summarizedText, originalLink: article.href }
+      return summarizedText
     } catch (error) {
       console.error(
         `Something went wrong when summarizing chunked articles ${(error as Error).message}`
@@ -87,19 +88,22 @@ async function summarizeArticles(article: SummarizedArticle): Promise<Content | 
   }
 }
 
-export async function finalize() {
+export async function finalize(): Promise<HackerNewsStoryWithParsedContent[] | undefined> {
   const res = await getContentsOfArticles()
   if (res && res.length > 0) {
     // Summarize all articles in parallel
-    const summarizedArticles = await Promise.all(
-      res.map((article) => {
-        if (article.title && article.content) {
-          return summarizeArticles(article)
-        }
-        return null
-      })
-    )
+    const summarizedArticlesPromises = res.map(async (article) => {
+      if (article.rawContent) {
+        // eslint-disable-next-line no-unused-vars
+        const { rawContent, ...articleWithoutRawContent } = article
+        const parsedContent = await summarizeArticles(article)
+        return { parsedContent, ...articleWithoutRawContent }
+      }
+      return null
+    })
 
-    return summarizedArticles.filter(Boolean) as Content[]
+    const summarizedArticles = await Promise.all(summarizedArticlesPromises)
+
+    return summarizedArticles.filter(Boolean) as HackerNewsStoryWithParsedContent[]
   }
 }
