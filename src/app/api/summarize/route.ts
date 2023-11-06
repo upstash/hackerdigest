@@ -22,14 +22,11 @@ async function handler(req: NextRequest) {
     throw new Error("`Upstash-Signature` header is not a string")
   }
   const body = await req.text()
-  const isValid = await receiver.verify({
+  await receiver.verify({
     signature,
     body,
   })
 
-  if (!isValid) {
-    return new NextResponse(new TextEncoder().encode("invalid signature"), { status: 403 })
-  }
   const articles = await getSummarizedArticles(10)
   console.log(articles)
   return NextResponse.json(articles)
