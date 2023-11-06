@@ -20,7 +20,7 @@ export function timeUntilNextFetch(): string {
     timeLeftString += hoursLeft + " hour(s) "
   }
   if (minutesLeft > 0) {
-    timeLeftString += "and " + minutesLeft + " minute(s) "
+    timeLeftString += `${hoursLeft > 0 ? "and " : ""}` + minutesLeft + " minute(s) "
   }
 
   timeLeftString = timeLeftString.trim() + " left until refresh"
