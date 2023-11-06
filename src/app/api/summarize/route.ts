@@ -19,7 +19,7 @@ async function handler(req: NextRequest) {
   if (typeof signature !== "string") {
     throw new Error("`Upstash-Signature` header is not a string")
   }
-  NextResponse.json({ hello: "world", signature })
+  return NextResponse.json({ hello: "world", signature })
   //   const body = await req.text()
   //   const isValid = await receiver.verify({
   //     signature,
