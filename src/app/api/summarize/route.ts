@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server"
 import { setArticles } from "@/commands/set"
 import { getSummarizedArticles } from "@/services/summarizer"
-import { verifySignatureEdge } from "@upstash/qstash/dist/nextjs"
+import { verifySignature } from "@upstash/qstash/dist/nextjs"
 
 async function handler() {
   console.log("Starting to summarize data from HackerNews")
@@ -16,6 +16,4 @@ async function handler() {
   }
 }
 
-export const POST = verifySignatureEdge(handler)
-
-export const runtime = "edge"
+export const POST = verifySignature(handler)
