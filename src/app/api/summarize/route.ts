@@ -6,7 +6,7 @@ export async function GET() {
   const articlesFromCache = await getArticles()
   if (articlesFromCache) return Response.json({ articlesFromCache })
 
-  const articles = await finalize()
+  const articles = await finalize(8)
   await setArticles(articles)
 
   return Response.json({ articles })

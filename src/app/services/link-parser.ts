@@ -23,10 +23,10 @@ async function fetchInnerContent(url?: string): Promise<Content> {
   }
 }
 
-export async function getContentsOfArticles(): Promise<
-  HackerNewsStoryWithRawContent[] | undefined
-> {
-  const articleLinksAndTitles = await fetchTopStoriesFromLast12Hours(3)
+export async function getContentsOfArticles(
+  articleLimit: number
+): Promise<HackerNewsStoryWithRawContent[] | undefined> {
+  const articleLinksAndTitles = await fetchTopStoriesFromLast12Hours(articleLimit)
   return await Promise.all(
     articleLinksAndTitles.map(async (article) => ({
       ...article,

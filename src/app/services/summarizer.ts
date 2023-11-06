@@ -88,10 +88,11 @@ async function summarizeArticles(
   }
 }
 
-export async function finalize(): Promise<HackerNewsStoryWithParsedContent[] | undefined> {
-  const res = await getContentsOfArticles()
+export async function finalize(
+  articleLimit: number
+): Promise<HackerNewsStoryWithParsedContent[] | undefined> {
+  const res = await getContentsOfArticles(articleLimit)
   if (res && res.length > 0) {
-    // Summarize all articles in parallel
     const summarizedArticlesPromises = res.map(async (article) => {
       if (article.rawContent) {
         // eslint-disable-next-line no-unused-vars
