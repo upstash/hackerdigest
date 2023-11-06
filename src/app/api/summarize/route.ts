@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server"
 import { setArticles } from "@/commands/set"
 import { getSummarizedArticles } from "@/services/summarizer"
-import { verifySignature } from "@upstash/qstash/dist/nextjs"
+import { verifySignatureEdge } from "@upstash/qstash/dist/nextjs"
 
 export const maxDuration = 299
 export const dynamic = "force-dynamic"
@@ -19,4 +19,4 @@ async function handler() {
   }
 }
 
-export const POST = verifySignature(handler)
+export const POST = verifySignatureEdge(handler)
