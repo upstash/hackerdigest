@@ -1,11 +1,13 @@
 import { NextRequest, NextResponse } from "next/server"
+import { setArticles } from "@/commands/set"
 import { getSummarizedArticles } from "@/services/summarizer"
 import { Receiver } from "@upstash/qstash/."
 
-export const maxDuration = 299
+export const maxDuration = 150
 
 async function handler(req: NextRequest) {
   console.log("Starting to summarize data from HackerNews")
+  const startDate = Date.now()
 
   const receiver = new Receiver({
     currentSigningKey: process.env.QSTASH_CURRENT_SIGNING_KEY!,
@@ -28,16 +30,15 @@ async function handler(req: NextRequest) {
   })
 
   const articles = await getSummarizedArticles(10)
-  console.log(articles)
-  return NextResponse.json(articles)
 
-  //   if (articles) {
-  //     await setArticles(articles)
-  //     return NextResponse.json({})
-  //   } else {
-  //     console.error("Something went wrong articles are missing!")
-  //     return NextResponse.json({})
-  //   }
+  if (articles) {
+    console.log(articles, { elapsedTimeInMS: startDate - Date.now() })
+    await setArticles(articles)
+    return NextResponse.json({})
+  } else {
+    console.error("Something went wrong articles are missing!")
+    return NextResponse.json({})
+  }
 }
 
 export const POST = handler
