@@ -56,7 +56,7 @@ export async function fetchTopStoriesFromLast12Hours(
 
   return topStoriesFromLast12Hours.map((story) => ({
     commentUrl: `https://news.ycombinator.com/item?id=${story.id}`,
-    postedDate: timeSince(story.time),
+    postedDate: timeSince(story.time * 1000),
     numOfComments: story.descendants,
     author: story.by,
     url: story.url,
@@ -65,15 +65,29 @@ export async function fetchTopStoriesFromLast12Hours(
   }))
 }
 
-function timeSince(time: number): string {
-  const secondsPast = Date.now() / 1000 - time
-  if (secondsPast < 60) {
-    return `${Math.round(secondsPast)} seconds ago`
-  } else if (secondsPast < 3600) {
-    return `${Math.round(secondsPast / 60)} minutes ago`
-  } else if (secondsPast < 86400) {
-    return `${Math.round(secondsPast / 3600)} hours ago`
-  } else {
-    return `${Math.round(secondsPast / 86400)} days ago`
+function timeSince(date: number) {
+  var seconds = Math.floor((new Date().valueOf() - date) / 1000)
+
+  var interval = seconds / 31536000
+
+  if (interval > 1) {
+    return Math.floor(interval) + " year(s)"
   }
+  interval = seconds / 2592000
+  if (interval > 1) {
+    return Math.floor(interval) + " month(s)"
+  }
+  interval = seconds / 86400
+  if (interval > 1) {
+    return Math.floor(interval) + " day(s)"
+  }
+  interval = seconds / 3600
+  if (interval > 1) {
+    return Math.floor(interval) + " hour(s)"
+  }
+  interval = seconds / 60
+  if (interval > 1) {
+    return Math.floor(interval) + " minute(s)"
+  }
+  return Math.floor(seconds) + " second(s)"
 }

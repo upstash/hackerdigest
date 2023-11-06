@@ -88,7 +88,7 @@ async function summarizeArticles(
   }
 }
 
-export async function finalize(
+export async function getSummarizedArticles(
   articleLimit: number
 ): Promise<HackerNewsStoryWithParsedContent[] | undefined> {
   const res = await getContentsOfArticles(articleLimit)

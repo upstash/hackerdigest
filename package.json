@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@upstash/qstash": "^2.1.9",
     "@upstash/redis": "^1.24.3",
     "next": "14.0.1",
     "node-html-parser": "^6.1.11",

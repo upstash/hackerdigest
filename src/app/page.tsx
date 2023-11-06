@@ -35,7 +35,7 @@ export default async function Home() {
                   <h3 className="max-w-[350px] text-lg font-semibold text-[#FBFBFB]">
                     {article?.title}
                   </h3>
-                  <span className="flex h-full items-start text-right">7 hours ago</span>
+                  <span className="flex h-full items-start text-right">{article?.postedDate}</span>
                 </div>
                 <p className="mb-10 text-sm font-medium text-gray-400">{article?.parsedContent}</p>
                 <div className="mt-auto flex items-center justify-between">

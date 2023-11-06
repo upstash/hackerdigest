@@ -1,13 +1,21 @@
+import { NextResponse } from "next/server"
+import { verifySignatureEdge } from "@upstash/qstash/dist/nextjs"
+
 import { getArticles } from "@/app/commands/get"
 import { setArticles } from "@/app/commands/set"
-import { finalize } from "@/app/services/summarizer"
+import { getSummarizedArticles } from "@/app/services/summarizer"
 
-export async function GET() {
+async function handler() {
+  console.log("Starting to summarize data from HackerNews")
   const articlesFromCache = await getArticles()
-  if (articlesFromCache) return Response.json({ articlesFromCache })
+  if (articlesFromCache) return NextResponse.json({ articlesFromCache })
 
-  const articles = await finalize(8)
+  const articles = await getSummarizedArticles(8)
   await setArticles(articles)
 
-  return Response.json({ articles })
+  return NextResponse.json({ articles })
 }
+
+export const POST = verifySignatureEdge(handler)
+
+export const runtime = "edge"
