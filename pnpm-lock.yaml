@@ -8,6 +8,9 @@ dependencies:
   '@upstash/qstash':
     specifier: ^2.1.9
     version: 2.1.9
+  '@upstash/ratelimit':
+    specifier: ^0.4.4
+    version: 0.4.4
   '@upstash/redis':
     specifier: ^1.24.3
     version: 1.24.3
@@ -605,11 +608,24 @@ packages:
     resolution: {integrity: sha512-zuVdFrMJiuCDQUMCzQaD6KL28MjnqqN8XnAqiEq9PNm/hCPTSGfrXCOfwj1ow4LFb/tNymJPwsNbVePc1xFqrQ==}
     dev: true
 
+  /@upstash/core-analytics@0.0.6:
+    resolution: {integrity: sha512-cpPSR0XJAJs4Ddz9nq3tINlPS5aLfWVCqhhtHnXt4p7qr5+/Znlt1Es736poB/9rnl1hAHrOsOvVj46NEXcVqA==}
+    engines: {node: '>=16.0.0'}
+    dependencies:
+      '@upstash/redis': 1.24.3
+    dev: false
+
   /@upstash/qstash@2.1.9:
     resolution: {integrity: sha512-Wh00p4yWpOk+UhrrYxmLJpYA08E4QISEWnd3iPLI8yZdcl0yK8lvAOgocAVFNm54k05K/eOLKvPWvupPmEIBzw==}
     dependencies:
       crypto-js: 4.2.0
       jose: 4.15.4
+    dev: false
+
+  /@upstash/ratelimit@0.4.4:
+    resolution: {integrity: sha512-y3q6cNDdcRQ2MRPRf5UNWBN36IwnZ4kAEkGoH3i6OqdWwz4qlBxNsw4/Rpqn9h93+Nx1cqg5IOq7O2e2zMJY1w==}
+    dependencies:
+      '@upstash/core-analytics': 0.0.6
     dev: false
 
   /@upstash/redis@1.24.3:
