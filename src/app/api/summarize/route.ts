@@ -15,8 +15,8 @@ async function handler(req: NextRequest) {
   })
 
   // @ts-ignore This can throw errors during vercel build
-  const signature = req.headers.get("upstash-signature")
-  console.log({ signature })
+  const signature = req.headers.get("upstash-signature") || req.headers.get("Upstash-Signature")
+  console.log(signature)
   if (!signature) {
     return new NextResponse(new TextEncoder().encode("`Upstash-Signature` header is missing"), {
       status: 403,
@@ -31,7 +31,7 @@ async function handler(req: NextRequest) {
     signature,
     body,
   })
-  console.log({ isValid })
+
   if (!isValid) {
     return new NextResponse(new TextEncoder().encode("invalid signature"), { status: 403 })
   }
