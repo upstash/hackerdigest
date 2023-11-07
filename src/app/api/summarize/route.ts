@@ -27,26 +27,24 @@ async function handler(req: NextRequest) {
     body,
   })
 
-  try {
-    const articles = await getSummarizedArticles(1)
+  console.log("Returning hello world")
+  return NextResponse.json({ hello: "World" })
+  //   try {
+  //     const articles = await getSummarizedArticles(1)
 
-    if (articles) {
-      console.log("articles", articles)
-      await setArticles(articles)
-      console.log("returning articles")
-      return new NextResponse(new TextEncoder().encode("Success"), {
-        status: 200,
-      })
-    } else {
-      console.error("Something went wrong articles are missing!")
-      return new NextResponse(new TextEncoder().encode("Success"), {
-        status: 200,
-      })
-    }
-  } catch (error) {
-    console.log(error, signature)
-    return NextResponse.json({})
-  }
+  //     if (articles) {
+  //       console.log("articles", articles)
+  //       await setArticles(articles)
+  //       console.log("returning articles")
+  //       return NextResponse.json({})
+  //     } else {
+  //       console.error("Something went wrong articles are missing!")
+  //       return NextResponse.json({})
+  //     }
+  //   } catch (error) {
+  //     console.log(error, signature)
+  //     return NextResponse.json({})
+  //   }
 }
 
 export const POST = handler
