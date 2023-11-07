@@ -1,9 +1,12 @@
 import { NextRequest, NextResponse } from "next/server"
+import { setArticles } from "@/commands/set"
+import { getSummarizedArticles } from "@/services/summarizer"
 import { Receiver } from "@upstash/qstash/."
 
 export const maxDuration = 150
 
 async function handler(req: NextRequest) {
+  console.log("starting")
   const receiver = new Receiver({
     currentSigningKey: process.env.QSTASH_CURRENT_SIGNING_KEY!,
     nextSigningKey: process.env.QSTASH_NEXT_SIGNING_KEY!,
@@ -19,25 +22,27 @@ async function handler(req: NextRequest) {
     throw new Error("`Upstash-Signature` header is not a string")
   }
   const body = await req.text()
-  const isValid = await receiver.verify({
+  await receiver.verify({
     signature,
     body,
   })
 
-  console.log({ body, signature, isValid })
-  await new Promise((r) => setTimeout(r, 20000))
-  return NextResponse.json({})
-  //
-  //   const articles = await getSummarizedArticles(10)
+  try {
+    const articles = await getSummarizedArticles(10)
 
-  //   if (articles) {
-  //     console.log(articles)
-  //     await setArticles(articles)
-  //     return NextResponse.json({})
-  //   } else {
-  //     console.error("Something went wrong articles are missing!")
-  //     return NextResponse.json({})
-  //   }
+    if (articles) {
+      console.log("articles", articles)
+      await setArticles(articles)
+      console.log("returning articles")
+      return NextResponse.json({})
+    } else {
+      console.error("Something went wrong articles are missing!")
+      return NextResponse.json({})
+    }
+  } catch (error) {
+    console.log(error, signature)
+    return NextResponse.json({})
+  }
 }
 
 export const POST = handler
