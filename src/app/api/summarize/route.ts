@@ -2,8 +2,6 @@ import { NextResponse } from "next/server"
 import { setArticles } from "@/commands/set"
 import { getSummarizedArticles } from "@/services/summarizer"
 
-export const maxDuration = 150
-
 async function handler() {
   //   console.log("starting")
   //   const receiver = new Receiver({
