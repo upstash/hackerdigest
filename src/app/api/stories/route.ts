@@ -4,7 +4,7 @@ import { Redis } from "@upstash/redis"
 
 import { getAllSummarizedArticles } from "@/app/actions/get-all-summarized-articles"
 
-export async function GET(req: NextRequest) {
+export async function POST(req: NextRequest) {
   const ratelimit = new Ratelimit({
     redis: Redis.fromEnv(),
     limiter: Ratelimit.slidingWindow(10, "10s"),
