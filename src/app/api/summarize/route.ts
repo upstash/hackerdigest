@@ -4,7 +4,7 @@ import { getSummarizedArticles } from "@/services/summarizer"
 
 export const maxDuration = 150
 
-async function handler(req: NextRequest) {
+async function handler() {
   //   console.log("starting")
   //   const receiver = new Receiver({
   //     currentSigningKey: process.env.QSTASH_CURRENT_SIGNING_KEY!,
