@@ -42,4 +42,4 @@ async function handler() {
   }
 }
 
-export const POST = handler
+export const GET = handler

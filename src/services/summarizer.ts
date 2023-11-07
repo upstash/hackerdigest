@@ -92,22 +92,18 @@ export async function getSummarizedArticles(
 ): Promise<HackerNewsStoryWithParsedContent[] | undefined> {
   const res = await getContentsOfArticles(articleLimit)
   if (res && res.length > 0) {
-    // Create an array to hold the Promises
-    const summarizedArticlesPromises = res.map((article) => {
+    const summarizedArticlesPromises = res.map(async (article) => {
       if (article.rawContent) {
-        // Here we're not awaiting, just creating the Promise
-        return summarizeArticles(article).then((parsedContent) => {
-          const { rawContent, ...articleWithoutRawContent } = article
-          return { parsedContent, ...articleWithoutRawContent }
-        })
+        // eslint-disable-next-line no-unused-vars
+        const { rawContent, ...articleWithoutRawContent } = article
+        const parsedContent = await summarizeArticles(article)
+        return { parsedContent, ...articleWithoutRawContent }
       }
-      return Promise.resolve(null) // Return a resolved promise for consistency
+      return null
     })
 
-    // Now await all the Promises together
     const summarizedArticles = await Promise.all(summarizedArticlesPromises)
 
-    // Filter out any nulls (articles that didn't have rawContent)
     return summarizedArticles.filter(Boolean) as HackerNewsStoryWithParsedContent[]
   }
 }
