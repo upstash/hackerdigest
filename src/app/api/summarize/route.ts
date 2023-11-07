@@ -28,7 +28,7 @@ async function handler(req: NextRequest) {
   })
 
   try {
-    const articles = await getSummarizedArticles(10)
+    const articles = await getSummarizedArticles(1)
 
     if (articles) {
       console.log("articles", articles)
