@@ -34,10 +34,14 @@ async function handler(req: NextRequest) {
       console.log("articles", articles)
       await setArticles(articles)
       console.log("returning articles")
-      return NextResponse.json({ hello: "world" })
+      return new NextResponse(new TextEncoder().encode("Success"), {
+        status: 200,
+      })
     } else {
       console.error("Something went wrong articles are missing!")
-      return NextResponse.json({ hello: "world" })
+      return new NextResponse(new TextEncoder().encode("Success"), {
+        status: 200,
+      })
     }
   } catch (error) {
     console.log(error, signature)
