@@ -31,7 +31,7 @@ async function handler() {
       console.log("articles", articles)
       await setArticles(articles)
       console.log("returning articles")
-      return NextResponse.json({}, { status: 204 })
+      return NextResponse.json({}, { status: 400 })
     } else {
       console.error("Something went wrong articles are missing!")
       return NextResponse.json({ message: "asdasdas" }, { status: 400 })
