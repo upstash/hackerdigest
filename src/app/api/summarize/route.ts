@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server"
+import { NextResponse } from "next/server"
 import { setArticles } from "@/commands/set"
 import { getSummarizedArticles } from "@/services/summarizer"
 
