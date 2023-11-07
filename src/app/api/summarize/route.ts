@@ -25,6 +25,7 @@ async function handler(req: NextRequest) {
   })
 
   console.log({ body, signature, isValid })
+  await new Promise((r) => setTimeout(r, 20000))
   return NextResponse.json({})
   //
   //   const articles = await getSummarizedArticles(10)
