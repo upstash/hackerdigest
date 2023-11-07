@@ -31,14 +31,14 @@ async function handler() {
       console.log("articles", articles)
       await setArticles(articles)
       console.log("returning articles")
-      return NextResponse.json({})
+      return NextResponse.json({ message: "asdasdas" }, { status: 200 })
     } else {
       console.error("Something went wrong articles are missing!")
-      return NextResponse.json({})
+      return NextResponse.json({ message: "asdasdas" }, { status: 400 })
     }
   } catch (error) {
     console.log("error", (error as Error).message)
-    return NextResponse.json({})
+    return NextResponse.json({}, { status: 400 })
   }
 }
 
