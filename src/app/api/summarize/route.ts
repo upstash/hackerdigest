@@ -1,6 +1,4 @@
 import { NextRequest, NextResponse } from "next/server"
-import { setArticles } from "@/commands/set"
-import { getSummarizedArticles } from "@/services/summarizer"
 import { Receiver } from "@upstash/qstash/."
 
 export const maxDuration = 150
