@@ -43,14 +43,14 @@ async function fetchStoryDetails(id: number): Promise<HackerNewsStoryRaw | null>
 export async function fetchTopStoriesFromLast12Hours(
   limit: number = 10
 ): Promise<HackerNewsStory[]> {
-  const twelveHoursAgoTimestamp = Date.now() - 12 * 60 * 60 * 1000
+  //   const twelveHoursAgoTimestamp = Date.now() - 12 * 60 * 60 * 1000
   const topStoryIds = await fetchTopStoryIds()
 
   const storyDetailsPromises = topStoryIds.map(fetchStoryDetails)
   const allStories = (await Promise.all(storyDetailsPromises)).filter((story) => story !== null)
 
   const topStoriesFromLast12Hours = allStories
-    .filter((story) => story && story.time * 1000 >= twelveHoursAgoTimestamp)
+    // .filter((story) => story && story.time * 1000 >= twelveHoursAgoTimestamp)
     .sort((a, b) => b!.score - a!.score)
     .slice(0, limit) as HackerNewsStoryRaw[]
 
