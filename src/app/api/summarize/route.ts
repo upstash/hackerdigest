@@ -2,6 +2,8 @@ import { NextResponse } from "next/server"
 import { setArticles } from "@/commands/set"
 import { getSummarizedArticles } from "@/services/summarizer"
 
+export const maxDuration = 300
+
 async function handler() {
   try {
     const articles = await getSummarizedArticles(10)
