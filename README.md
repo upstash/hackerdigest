@@ -47,4 +47,4 @@ We welcome contributions to HackerDigest. If you have a suggestion that would ma
 
 ## Feature Pipeline
 
-[ ] - Create a newsletter with Resend and send it every 24 hour to users.
+[ ] - Create a newsletter with Resend and send it every 24 hour to users!
