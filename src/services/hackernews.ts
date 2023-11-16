@@ -1,4 +1,4 @@
-const HN_BASE_URL = "https://hacker-news.firebaseio.com/v0"
+import { requester } from "@/app/libs/requester"
 
 type HackerNewsStoryRaw = {
   id: number
@@ -23,15 +23,13 @@ export type HackerNewsStory = {
 
 // Fetch the top story IDs
 async function fetchTopStoryIds(): Promise<number[]> {
-  const response = await fetch(`${HN_BASE_URL}/topstories.json`)
-  const storyIds: number[] = await response.json()
+  const storyIds: number[] = await requester.get(`topstories.json`).json()
   return storyIds
 }
 
 // Fetch story details by ID
 async function fetchStoryDetails(id: number): Promise<HackerNewsStoryRaw | null> {
-  const response = await fetch(`${HN_BASE_URL}/item/${id}.json`)
-  const story = await response.json()
+  const story: HackerNewsStoryRaw | null = await requester.get(`item/${id}.json`).json()
   // Check if the story has a URL and is of type 'story'
   if (story && story.url && story.type === "story") {
     return story
@@ -43,14 +41,14 @@ async function fetchStoryDetails(id: number): Promise<HackerNewsStoryRaw | null>
 export async function fetchTopStoriesFromLast12Hours(
   limit: number = 10
 ): Promise<HackerNewsStory[]> {
-  //   const twelveHoursAgoTimestamp = Date.now() - 12 * 60 * 60 * 1000
+  const twelveHoursAgoTimestamp = Date.now() - 12 * 60 * 60 * 1000
   const topStoryIds = await fetchTopStoryIds()
 
   const storyDetailsPromises = topStoryIds.map(fetchStoryDetails)
   const allStories = (await Promise.all(storyDetailsPromises)).filter((story) => story !== null)
 
   const topStoriesFromLast12Hours = allStories
-    // .filter((story) => story && story.time * 1000 >= twelveHoursAgoTimestamp)
+    .filter((story) => story && story.time * 1000 >= twelveHoursAgoTimestamp)
     .sort((a, b) => b!.score - a!.score)
     .slice(0, limit) as HackerNewsStoryRaw[]
 

@@ -12,6 +12,7 @@
     "@upstash/qstash": "^2.1.9",
     "@upstash/ratelimit": "^0.4.4",
     "@upstash/redis": "^1.24.3",
+    "ky": "^1.1.3",
     "next": "14.0.1",
     "node-html-parser": "^6.1.11",
     "openai": "^4.14.2",
