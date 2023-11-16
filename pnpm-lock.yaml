@@ -6,8 +6,8 @@ settings:
 
 dependencies:
   '@upstash/qstash':
-    specifier: ^2.1.9
-    version: 2.1.11
+    specifier: ^2.2.0
+    version: 2.2.0
   '@upstash/ratelimit':
     specifier: ^0.4.4
     version: 0.4.4
@@ -618,8 +618,8 @@ packages:
       '@upstash/redis': 1.24.3
     dev: false
 
-  /@upstash/qstash@2.1.11:
-    resolution: {integrity: sha512-aITnBuNM0hfhjXD4IbgJNkJsQ7HyH5tib40EfMLoq2Gzo7y4e8L+UjXNDH9FLl4+KQWAGfNOBipq+n7MAhY42Q==}
+  /@upstash/qstash@2.2.0:
+    resolution: {integrity: sha512-9ZdTp1r0geB3VWshBFu/mbzjjZpSsU2kz2T3cbYZ17EPe3DSrBVO2ij1PrESTYKUlDt33WcJdbwSssOyHzz83g==}
     dependencies:
       crypto-js: 4.2.0
       jose: 4.15.4

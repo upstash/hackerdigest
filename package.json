@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@upstash/qstash": "^2.1.9",
+    "@upstash/qstash": "^2.2.0",
     "@upstash/ratelimit": "^0.4.4",
     "@upstash/redis": "^1.24.3",
     "ky": "^1.1.3",
