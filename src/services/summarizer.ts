@@ -95,6 +95,7 @@ export async function getSummarizedArticles(
         // eslint-disable-next-line no-unused-vars
         const { rawContent, ...articleWithoutRawContent } = article
         const parsedContent = await summarizeArticles(article)
+        if (!parsedContent) return null
         return { parsedContent, ...articleWithoutRawContent }
       }
       return null
