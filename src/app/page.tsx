@@ -1,5 +1,6 @@
 import { getAllSummarizedArticles } from "./actions/get-all-summarized-articles"
-import { TimeUntilNext } from "./components/time-until-next"
+
+// import { TimeUntilNext } from "./components/time-until-next"
 
 export default async function Home() {
   const { stories } = await getAllSummarizedArticles()
@@ -7,7 +8,7 @@ export default async function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-between bg-[#0B0A0A] p-4 text-[#FBFBFB] sm:p-24">
       <div className="max-w-[1200px]">
-        <TimeUntilNext />
+        {/* <TimeUntilNext /> */}
         <section className="pb-16 pt-14">
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
             <div className="sm:col-span-2">

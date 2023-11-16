@@ -13,17 +13,16 @@ const openai = new OpenAI({
 async function summarizeText(title: string, content: string): Promise<string | undefined> {
   const prompt = `
   Title: "${title}"
-  Can you summarize the key points and main ideas of the following text in a concise and clear manner without omitting any important information? '${content}'`
+  Summarize the following news article in 2-3 clear and concise sentences without repetition: "${content}"`
 
   try {
     const chatCompletion = await openai.completions.create({
       model: "gpt-3.5-turbo-instruct",
       prompt,
-      temperature: 0.3,
-      top_p: 0.95,
-      frequency_penalty: 0.5,
+      temperature: 0.2,
+      frequency_penalty: 0,
       presence_penalty: 0,
-      max_tokens: 200,
+      max_tokens: 150,
       stream: false,
       n: 1,
     })
@@ -42,11 +41,10 @@ async function summarizeChunk(chunk?: string) {
   const chatCompletion = await openai.completions.create({
     model: "gpt-3.5-turbo-instruct",
     prompt,
-    temperature: 0.3,
-    top_p: 0.95,
-    frequency_penalty: 0.5,
+    temperature: 0.2,
+    frequency_penalty: 0,
     presence_penalty: 0,
-    max_tokens: 200,
+    max_tokens: 300,
     stream: false,
     n: 1,
   })

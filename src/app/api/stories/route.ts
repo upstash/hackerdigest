@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import { Ratelimit } from "@upstash/ratelimit" // for deno: see above
+import { Ratelimit } from "@upstash/ratelimit"
 import { Redis } from "@upstash/redis"
 
 import { getAllSummarizedArticles } from "@/app/actions/get-all-summarized-articles"
