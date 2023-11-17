@@ -23,6 +23,7 @@ To install HackerDigest, follow these steps:
 
 ```bash
 pnpm install
+
 pnpm dev
 ```
 
