@@ -32,6 +32,26 @@ async function summarizeText(title: string, content: string): Promise<string | u
   }
 }
 
+async function summarizeComment(content: string): Promise<string | undefined> {
+  const prompt = `Summarize the following fellow hackernews enjoyer comment: "${content}"`
+
+  try {
+    const chatCompletion = await openai.completions.create({
+      model: "gpt-3.5-turbo-instruct",
+      prompt,
+      temperature: 0.2,
+      frequency_penalty: 0,
+      presence_penalty: 0,
+      max_tokens: 100,
+      stream: false,
+      n: 1,
+    })
+    return chatCompletion.choices[0]?.text
+  } catch (error) {
+    console.error("summarizeText failed", (error as Error).message)
+  }
+}
+
 async function summarizeChunk(chunk?: string) {
   if (!chunk) return null
 
@@ -58,6 +78,7 @@ async function summarizeArticles(
     try {
       if (!article.rawContent) throw new Error("Content is missing from summarizeArticles!")
       const summarizedText = await summarizeText(article.title, article.rawContent)
+
       if (!summarizedText) throw new Error("summarizedText is missing!")
       return summarizedText
     } catch (error) {
@@ -89,20 +110,35 @@ export async function getSummarizedArticles(
   articleLimit: number
 ): Promise<HackerNewsStoryWithParsedContent[] | undefined> {
   const res = await getContentsOfArticles(articleLimit)
+
   if (res && res.length > 0) {
     const summarizedArticlesPromises = res.map(async (article) => {
       if (article.rawContent) {
         // eslint-disable-next-line no-unused-vars
         const { rawContent, ...articleWithoutRawContent } = article
+
+        // Summarize the main article content
         const parsedContent = await summarizeArticles(article)
+
+        const parsedCommentsPromises = article.comments.map(async (article) =>
+          article ? { ...article, text: await summarizeComment(article.text) } : null
+        )
+
+        const awaitedParsedComments = await Promise.all(parsedCommentsPromises)
+
         if (!parsedContent) return null
-        return { parsedContent, ...articleWithoutRawContent }
+
+        return { parsedContent, ...articleWithoutRawContent, comments: awaitedParsedComments }
       }
+
       return null
     })
 
     const summarizedArticles = await Promise.all(summarizedArticlesPromises)
 
+    // Filter out any null values (articles without raw content or failed parsing)
     return summarizedArticles.filter(Boolean) as HackerNewsStoryWithParsedContent[]
   }
+
+  return undefined
 }

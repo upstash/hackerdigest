@@ -8,7 +8,16 @@ type HackerNewsStoryRaw = {
   title: string
   url: string
   descendants: number // Number of comments
-  type: "story" // Ensures the type is strictly 'story'
+  type: "story" | "comment" // Ensures the type is strictly 'story'
+  kids: number[]
+}
+
+type HackerNewsComment = {
+  id: number
+  by: string // Author of the story
+  time: string
+  type: "story" | "comment"
+  text: string
 }
 
 export type HackerNewsStory = {
@@ -19,6 +28,7 @@ export type HackerNewsStory = {
   numOfComments: number
   commentUrl: string
   postedDate: string
+  comments: (HackerNewsComment | null)[]
 }
 
 // Fetch the top story IDs
@@ -37,6 +47,27 @@ async function fetchStoryDetails(id: number): Promise<HackerNewsStoryRaw | null>
   return null
 }
 
+// Fetch top 3 comments by ID
+async function fetchTopThreeComments(ids: number[]): Promise<HackerNewsComment[]> {
+  const comments = (await Promise.all(
+    ids.map((id) => requester.get(`item/${id}.json`).json())
+  )) as HackerNewsComment[]
+
+  return comments
+    .map(
+      (comment) =>
+        comment && {
+          by: comment.by,
+          //@ts-ignore
+          time: timeSince((comment.time as number) * 1000),
+          id: comment.id,
+          type: comment.type,
+          text: comment.text,
+        }
+    )
+    .filter(Boolean)
+}
+
 // Fetch top stories from the last 12 hours
 export async function fetchTopStoriesFromLast12Hours(
   limit: number = 10
@@ -52,15 +83,23 @@ export async function fetchTopStoriesFromLast12Hours(
     .sort((a, b) => b!.score - a!.score)
     .slice(0, limit) as HackerNewsStoryRaw[]
 
-  return topStoriesFromLast12Hours.map((story) => ({
-    commentUrl: `https://news.ycombinator.com/item?id=${story.id}`,
-    postedDate: timeSince(story.time * 1000),
-    numOfComments: story.descendants,
-    author: story.by,
-    url: story.url,
-    title: story.title,
-    score: story.score,
-  }))
+  const topStoriesWithCommentsPromises = topStoriesFromLast12Hours.map(async (story) => {
+    const comments = await fetchTopThreeComments(story.kids.slice(0, 3))
+    return {
+      comments,
+      commentUrl: `https://news.ycombinator.com/item?id=${story.id}`,
+      postedDate: timeSince(story.time * 1000),
+      numOfComments: story.descendants,
+      author: story.by,
+      url: story.url,
+      title: story.title,
+      score: story.score,
+    }
+  })
+
+  const topStoriesWithComments = await Promise.all(topStoriesWithCommentsPromises)
+
+  return topStoriesWithComments
 }
 
 export function timeSince(date: number) {

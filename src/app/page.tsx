@@ -1,7 +1,5 @@
 import { getAllSummarizedArticles } from "./actions/get-all-summarized-articles"
 
-// import { TimeUntilNext } from "./components/time-until-next"
-
 export default async function Home() {
   const { stories } = await getAllSummarizedArticles()
 
@@ -31,7 +29,7 @@ export default async function Home() {
         {stories?.length ? (
           <section>
             <h2 className="mb-8 text-2xl font-bold tracking-tight sm:text-4xl">Stories</h2>
-            <div className="grid gap-8 sm:grid-cols-1 lg:grid-cols-2">
+            <div className="grid grid-cols-1 gap-8">
               {stories.map((article, index) => (
                 <div
                   key={index}
@@ -45,9 +43,31 @@ export default async function Home() {
                       {article?.postedDate}
                     </span>
                   </div>
-                  <p className="mb-10 text-sm font-medium text-gray-400">
-                    {article?.parsedContent}
-                  </p>
+                  <p className="mb-8 text-sm font-medium text-gray-400">{article?.parsedContent}</p>
+
+                  <div className="mb-8 space-y-4 rounded-md border border-gray-800 p-4">
+                    <div>Top three comments:</div>
+                    <div className="ml-5 space-y-6">
+                      {article?.comments?.map(
+                        (comment) =>
+                          comment?.text && (
+                            <p className="text-sm font-medium text-gray-400" key={comment?.id}>
+                              <span className="font-medium text-[#00a372]">###</span>{" "}
+                              <span>{comment?.text}</span>
+                              <div className="mt-2 flex gap-5 font-medium text-[#00a372]">
+                                <p>
+                                  Author: <span className="text-[#FBFBFB]">{comment?.by}</span>
+                                </p>
+                                <p className="">
+                                  Posted: <span className=" text-[#FBFBFB]">{comment?.time}</span>
+                                </p>
+                              </div>
+                            </p>
+                          )
+                      )}
+                    </div>
+                  </div>
+
                   <div className="mt-auto flex items-center justify-between">
                     <div className="font-medium text-[#00a372]">
                       <p>

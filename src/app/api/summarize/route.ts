@@ -7,7 +7,7 @@ export const maxDuration = 300
 
 async function handler() {
   try {
-    const articles = await getSummarizedArticles(10)
+    const articles = await getSummarizedArticles(15)
     if (articles) {
       await setArticles(articles)
       return NextResponse.json({ articles })
