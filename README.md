@@ -1,5 +1,10 @@
 # HackerDigest
 
+> [!NOTE]  
+> **This project is a Community Project.**
+>
+> The project is maintained and supported by the community. Upstash may contribute but does not officially support or assume responsibility for it.
+
 HackerDigest is a modern app designed to summarize top scoring, up to date Hackernews stories for TLDR lovers. This app showcases [https://upstash.com/](Upstash) products. HackerDigest is perfect for tech lovers who don't like spending ton of time reading every bit of word.
 
 ## Features
